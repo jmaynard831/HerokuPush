@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,8 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.jwtTestTwo.jwtTestTwo.auth.ApplicationUserService;
 import com.jwtTestTwo.jwtTestTwo.jwt.JwtConfig;
@@ -56,7 +57,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
 	                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
 	                .authorizeRequests()
-	                .antMatchers("/","static/*", "index", "/css/**", "/js/**","/swagger-ui.html").permitAll()
+	                .antMatchers("/","static/*", "index", "/css/**", "/js/**","/swagger-ui.html","/webjars/**").permitAll()
+	                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 	                .antMatchers("/register").permitAll()
 	                //Adding this comment
 	                .antMatchers("/api/**").hasAnyRole(ApplicationUserRole.USER.name(), ApplicationUserRole.ADMIN.name())
