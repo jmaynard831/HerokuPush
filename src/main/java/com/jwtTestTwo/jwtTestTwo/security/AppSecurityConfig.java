@@ -57,11 +57,11 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
 	                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
 	                .authorizeRequests()
-	                .antMatchers("/","/static/**","manifest", "index", "/css/**", "/js/**","/swagger-ui.html","/webjars/**").permitAll()
+	                .antMatchers("/","/static/**","/manifest**", "index", "/css/**", "/js/**","/swagger-ui.html","/webjars/**").permitAll()
 	                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-	                .antMatchers("/register").permitAll()
+	                .antMatchers("/register","/addUser","/error").permitAll()
 	                //Adding this comment
-	                .antMatchers("/api/**").hasAnyRole(ApplicationUserRole.USER.name(), ApplicationUserRole.ADMIN.name())
+	                .antMatchers("/api/**","/listTodo","/addTodo").hasAnyRole(ApplicationUserRole.USER.name(), ApplicationUserRole.ADMIN.name())
 	                .anyRequest()
 	                .authenticated();
 	    }
