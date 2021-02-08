@@ -35,6 +35,9 @@ public class ApplicationUserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		if(username=="" || username==null) {
+			throw new UsernameNotFoundException(username + " cannot be blank.");
+		}
 		Optional<ApplicationUser> user = applicationUserDAO.findByUsername(username);
 		user.orElseThrow(()-> new UsernameNotFoundException(username+ " is not found."));
 		return user.map(MyUserDetails::new).get();
